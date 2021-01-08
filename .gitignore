@@ -1,0 +1,10 @@
+# ignore everything in root directory
+/*
+
+# un-ignore specific files in root directory
+!.gitignore
+!CMakeLists.txt
+!README.md
+
+# un-ignore specific subdirectories (and everything in them)
+!/Source/
