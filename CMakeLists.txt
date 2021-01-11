@@ -7,7 +7,9 @@ project(PortfolioAnalyzer
 set(SOURCES
   "Source/Main.cpp")
 
-set(PRIVATE_INCLUDE_DIRECTORIES "Source")
+set(PRIVATE_INCLUDE_DIRECTORIES
+  "External/rapidjson/include"
+  "Source")
 
 add_executable(PortfolioAnalyzer ${SOURCES})
 

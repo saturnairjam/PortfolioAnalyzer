@@ -4,6 +4,7 @@
 # un-ignore specific files in root directory
 !.clang-format
 !.gitignore
+!.gitmodules
 !CMakeLists.txt
 !README.md
 

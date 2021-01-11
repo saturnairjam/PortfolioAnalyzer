@@ -1,0 +1,4 @@
+[submodule "External/rapidjson"]
+	path = External/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
+        ignore = dirty
