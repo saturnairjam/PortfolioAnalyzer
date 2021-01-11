@@ -5,9 +5,12 @@ project(PortfolioAnalyzer
   LANGUAGES CXX)
 
 set(SOURCES
+  "Source/AssetClass.cpp"
   "Source/AssetClass.hpp"
   "Source/AssetClassBuilder.hpp"
+  "Source/AssetClassBuilder.cpp"
   "Source/Main.cpp"
+  "Source/Portfolio.cpp"
   "Source/Portfolio.hpp"
   "Source/PortfolioBuilder.cpp"
   "Source/PortfolioBuilder.hpp"

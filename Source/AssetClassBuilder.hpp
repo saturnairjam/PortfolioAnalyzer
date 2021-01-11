@@ -7,11 +7,13 @@
 class AssetClassBuilder
 {
 public:
-    AssetClassBuilder() = default;
+    AssetClassBuilder();
     ~AssetClassBuilder() = default;
 
-    std::shared_ptr<AssetClass> GetAssetClass() { return mAssetClass; }
+    std::shared_ptr<AssetClass> GetAssetClass();
 
 private:
     std::shared_ptr<AssetClass> mAssetClass;
+
+    bool mConstructedSuccessfully {false};
 };

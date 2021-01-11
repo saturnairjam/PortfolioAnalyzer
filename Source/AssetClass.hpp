@@ -10,19 +10,20 @@ class AssetClassBuilder; // forward declaration
 class AssetClass
 {
 public:
-    const std::string& GetName() { return mName; }
+    ~AssetClass() = default;
 
-    Date GetStartDate() { return mStartDate; }
-    int GetDuration() { return mDurationInMonths; }
+    const std::string& GetName();
 
-    const std::vector<float>& GetMonthEndNavs() { return mMonthEndNavs; }
-    const std::vector<float>& GetMonthOnMonthGrowth() { return mMonthOnMonthGrowth; }
+    Date GetStartDate();
+    int GetDuration();
+
+    const std::vector<float>& GetMonthEndNavs();
+    const std::vector<float>& GetMonthOnMonthGrowth();
 
     friend class AssetClassBuilder;
 
 private:
     AssetClass() = default;
-    ~AssetClass() = default;
 
     std::string mName;
 

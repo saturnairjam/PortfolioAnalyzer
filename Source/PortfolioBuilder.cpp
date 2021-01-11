@@ -57,9 +57,15 @@ PortfolioBuilder::PortfolioBuilder(char* jsonFile)
 
         for (auto& assetClass : assetClassWeightsArray.GetArray())
         {
+            mPortfolio->mAssetClassWeightsMap[assetClass["Name"].GetString()] = assetClass["Weight"].GetInt();
+
+            // TODO: create asset class object and add to map
+
             std::cout << "AssetClass: Name: " << assetClass["Name"].GetString()
                       << ", Weight: " << assetClass["Weight"].GetInt() << "\n";
         }
+
+        // TODO: iterate through asset class map and replace weights with proportions
     }
 
     std::string rebalancingStrategy(portfolioDOM["RebalancingStrategy"].GetString());

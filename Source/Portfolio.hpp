@@ -14,16 +14,16 @@ class Portfolio
 public:
     ~Portfolio() = default;
 
-    const std::string& GetName() { return mName; }
+    const std::string& GetName();
 
-    Date GetStartDate() { return mStartDate; }
-    int GetDuration() { return mDurationInMonths; }
+    Date GetStartDate();
+    int GetDuration();
 
-    RebalancingStrategy GetRebalancingStrategy() { return mRebalancingStrategy; }
-    int GetRebalancingPeriod() { return mRebalancingPeriodInMonths; }
-    int GetRebalancingThreshold() { return mRebalancingThreshold; }
+    RebalancingStrategy GetRebalancingStrategy();
+    int GetRebalancingPeriod();
+    int GetRebalancingThreshold();
 
-    const std::map<std::shared_ptr<AssetClass>, float>& GetAssetClassProportions() { return mAssetClassProportionsMap; }
+    const std::map<std::shared_ptr<AssetClass>, float>& GetAssetClassProportions();
 
     friend class PortfolioBuilder;
 
@@ -33,12 +33,14 @@ private:
     std::string mName;
 
     Date mStartDate;
-    int mDurationInMonths;
+    int mDurationInMonths {0};
 
-    RebalancingStrategy mRebalancingStrategy;
+    RebalancingStrategy mRebalancingStrategy {RebalancingStrategy::Periodic};
 
     int mRebalancingPeriodInMonths {12};
     int mRebalancingThreshold {0};
+
+    std::map<std::string, int> mAssetClassWeightsMap;
 
     std::map<std::shared_ptr<AssetClass>, float> mAssetClassProportionsMap;
 };
