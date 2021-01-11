@@ -1,15 +1,18 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <string>
 
 #include "AssetClass.hpp"
 #include "Types.hpp"
 
+class PortfolioBuilder; // forward declaration
+
 class Portfolio
 {
 public:
-    std::string GetName() { return mName; }
+    const std::string& GetName() { return mName; }
 
     Date GetStartDate() { return mStartDate; }
     int GetDuration() { return mDurationInMonths; }
@@ -20,7 +23,12 @@ public:
 
     const std::map<std::shared_ptr<AssetClass>, float>& GetAssetClassProportions() { return mAssetClassProportionsMap; }
 
+    friend class PortfolioBuilder;
+
 private:
+    Portfolio() = default;
+    ~Portfolio() = default;
+
     std::string mName;
 
     Date mStartDate;

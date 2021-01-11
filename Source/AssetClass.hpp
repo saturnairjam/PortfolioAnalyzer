@@ -5,10 +5,12 @@
 
 #include "Types.hpp"
 
+class AssetClassBuilder; // forward declaration
+
 class AssetClass
 {
 public:
-    std::string GetName() { return mName; }
+    const std::string& GetName() { return mName; }
 
     Date GetStartDate() { return mStartDate; }
     int GetDuration() { return mDurationInMonths; }
@@ -16,7 +18,12 @@ public:
     const std::vector<float>& GetMonthEndNavs() { return mMonthEndNavs; }
     const std::vector<float>& GetMonthOnMonthGrowth() { return mMonthOnMonthGrowth; }
 
+    friend class AssetClassBuilder;
+
 private:
+    AssetClass() = default;
+    ~AssetClass() = default;
+
     std::string mName;
 
     Date mStartDate;

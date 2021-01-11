@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "Portfolio.hpp"
+#include "PortfolioBuilder.hpp"
 
 int main(int argc, char** argv)
 {
