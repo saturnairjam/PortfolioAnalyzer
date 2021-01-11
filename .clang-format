@@ -1,0 +1,19 @@
+BasedOnStyle: WebKit
+
+Language: Cpp
+Standard: Cpp11
+
+Cpp11BracedListStyle: true
+
+BreakBeforeBraces: Allman
+ColumnLimit: 120
+
+AlignAfterOpenBracket: AlwaysBreak
+AllowAllParametersOfDeclarationOnNextLine: false
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBinaryOperators: None
+PointerAlignment: Left
+SortIncludes: true
+SpaceAfterCStyleCast: true
+UseTab: Never
