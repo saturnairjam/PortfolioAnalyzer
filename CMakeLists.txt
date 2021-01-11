@@ -5,7 +5,13 @@ project(PortfolioAnalyzer
   LANGUAGES CXX)
 
 set(SOURCES
-  "Source/Main.cpp")
+  "Source/AssetClass.hpp"
+  "Source/AssetClassBuilder.hpp"
+  "Source/Main.cpp"
+  "Source/Portfolio.hpp"
+  "Source/PortfolioBuilder.cpp"
+  "Source/PortfolioBuilder.hpp"
+  "Source/Types.hpp")
 
 set(PRIVATE_INCLUDE_DIRECTORIES
   "External/rapidjson/include"

@@ -18,5 +18,11 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
+    auto portfolioBuilder = std::make_shared<PortfolioBuilder>(argv[1]);
+
+    {
+        auto portfolio = portfolioBuilder->GetPortfolio();
+    }
+
     return EXIT_SUCCESS;
 }

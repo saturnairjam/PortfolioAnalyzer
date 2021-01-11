@@ -12,6 +12,8 @@ class PortfolioBuilder; // forward declaration
 class Portfolio
 {
 public:
+    ~Portfolio() = default;
+
     const std::string& GetName() { return mName; }
 
     Date GetStartDate() { return mStartDate; }
@@ -27,7 +29,6 @@ public:
 
 private:
     Portfolio() = default;
-    ~Portfolio() = default;
 
     std::string mName;
 

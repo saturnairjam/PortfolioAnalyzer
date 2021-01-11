@@ -7,11 +7,13 @@
 class PortfolioBuilder
 {
 public:
-    PortfolioBuilder() = default;
+    PortfolioBuilder(char* jsonFile);
     ~PortfolioBuilder() = default;
 
-    std::shared_ptr<Portfolio> GetPortfolio() { return mPortfolio; }
+    std::shared_ptr<Portfolio> GetPortfolio();
 
 private:
     std::shared_ptr<Portfolio> mPortfolio;
+
+    bool mConstructedSuccessfully {false};
 };

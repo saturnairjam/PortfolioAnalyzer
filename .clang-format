@@ -10,6 +10,7 @@ ColumnLimit: 120
 
 AlignAfterOpenBracket: AlwaysBreak
 AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortFunctionsOnASingleLine: Empty
 BinPackArguments: false
 BinPackParameters: false
 BreakBeforeBinaryOperators: None
