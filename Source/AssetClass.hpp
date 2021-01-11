@@ -28,7 +28,7 @@ private:
     std::string mName;
 
     Date mStartDate;
-    int mDurationInMonths;
+    int mDurationInMonths {0};
 
     std::vector<float> mMonthEndNavs;
     std::vector<float> mMonthOnMonthGrowth;

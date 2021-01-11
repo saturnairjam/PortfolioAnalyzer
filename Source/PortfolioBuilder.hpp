@@ -7,7 +7,8 @@
 class PortfolioBuilder
 {
 public:
-    PortfolioBuilder(char* jsonFile);
+    PortfolioBuilder(const std::string& assetClassPath, const std::string& portfolioJsonFilename);
+
     ~PortfolioBuilder() = default;
 
     std::shared_ptr<Portfolio> GetPortfolio();

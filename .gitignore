@@ -10,3 +10,4 @@
 
 # un-ignore specific subdirectories (and everything in them)
 !/Source/
+!/Data/

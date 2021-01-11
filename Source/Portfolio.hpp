@@ -40,7 +40,5 @@ private:
     int mRebalancingPeriodInMonths {12};
     int mRebalancingThreshold {0};
 
-    std::map<std::string, int> mAssetClassWeightsMap;
-
     std::map<std::shared_ptr<AssetClass>, float> mAssetClassProportionsMap;
 };

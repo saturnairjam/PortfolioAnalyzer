@@ -1,29 +1,84 @@
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 
 #include "rapidjson/document.h"
 #include "rapidjson/error/en.h"
 
+#include "AssetClassBuilder.hpp"
 #include "PortfolioBuilder.hpp"
 
-PortfolioBuilder::PortfolioBuilder(char* jsonFile)
+PortfolioBuilder::PortfolioBuilder(const std::string& assetClassPath, const std::string& portfolioJsonFilename)
 {
-    // attempt to open JSON file
+    // verify that asset class path is a directory
 
-    std::ifstream portfolioJsonFile(jsonFile);
-
-    if (!portfolioJsonFile.is_open())
+    if (!std::filesystem::is_directory(assetClassPath))
     {
-        std::cerr << "failed to open: " << jsonFile << "\n";
+        std::cerr << "not a directory: " << assetClassPath << "\n";
 
         return;
     }
 
-    // load JSON file into string object
+    std::map<std::string, rapidjson::Document> assetClassDomMap;
+
+    // iterate over all JSON files in asset class path
+
+    for (const auto& file : std::filesystem::directory_iterator(assetClassPath))
+    {
+        std::cout << file.path() << "\n";
+
+        // attempt to open asset class JSON file
+
+        std::ifstream assetClassJsonFile(file.path());
+
+        if (!assetClassJsonFile.is_open())
+        {
+            std::cerr << "failed to open: " << file.path() << "\n";
+
+            return;
+        }
+
+        // load asset class JSON file into string object
+
+        std::string assetClassJSON(
+            (std::istreambuf_iterator<char>(assetClassJsonFile)), (std::istreambuf_iterator<char>()));
+
+        // parse asset class JSON into DOM
+
+        rapidjson::Document assetClassDOM;
+
+        {
+            rapidjson::ParseResult result = assetClassDOM.Parse(assetClassJSON.c_str());
+
+            if (result.IsError())
+            {
+                std::cerr << "asset class JSON invalid: " << rapidjson::GetParseError_En(result.Code()) << "\n";
+
+                return;
+            }
+        }
+
+        // add (move) asset class DOM to map indexed by asset class name
+
+        assetClassDomMap[assetClassDOM["Name"].GetString()] = std::move(assetClassDOM);
+    }
+
+    // attempt to open portfolio JSON file
+
+    std::ifstream portfolioJsonFile(portfolioJsonFilename);
+
+    if (!portfolioJsonFile.is_open())
+    {
+        std::cerr << "failed to open: " << portfolioJsonFilename << "\n";
+
+        return;
+    }
+
+    // load portfolio JSON file into string object
 
     std::string portfolioJSON((std::istreambuf_iterator<char>(portfolioJsonFile)), (std::istreambuf_iterator<char>()));
 
-    // parse JSON into DOM
+    // parse portfolio JSON into DOM
 
     rapidjson::Document portfolioDOM;
 
@@ -38,10 +93,6 @@ PortfolioBuilder::PortfolioBuilder(char* jsonFile)
         }
     }
 
-    // TODO:
-    // - load schema JSON into DOM
-    // - validate DOM against schema
-
     // create portfolio object
 
     mPortfolio = std::shared_ptr<Portfolio>(new Portfolio);
@@ -52,20 +103,51 @@ PortfolioBuilder::PortfolioBuilder(char* jsonFile)
 
     std::cout << "Name: " << mPortfolio->mName << "\n";
 
+    int totalWeight = 0;
+
     {
         const rapidjson::Value& assetClassWeightsArray = portfolioDOM["AssetClassWeights"];
 
-        for (auto& assetClass : assetClassWeightsArray.GetArray())
+        for (auto& assetClassEntry : assetClassWeightsArray.GetArray())
         {
-            mPortfolio->mAssetClassWeightsMap[assetClass["Name"].GetString()] = assetClass["Weight"].GetInt();
+            std::cout << "AssetClass: Name: " << assetClassEntry["Name"].GetString()
+                      << ", Weight: " << assetClassEntry["Weight"].GetInt() << "\n";
 
-            // TODO: create asset class object and add to map
+            totalWeight += assetClassEntry["Weight"].GetInt();
 
-            std::cout << "AssetClass: Name: " << assetClass["Name"].GetString()
-                      << ", Weight: " << assetClass["Weight"].GetInt() << "\n";
+            // check if asset class exists in map
+
+            auto it = assetClassDomMap.find(assetClassEntry["Name"].GetString());
+
+            if (it == assetClassDomMap.end())
+            {
+                std::cerr << "non-existent asset class: " << assetClassEntry["Name"].GetString() << "\n";
+
+                return;
+            }
+
+            // create asset class object
+
+            AssetClassBuilder assetClassBuilder(it->second);
+
+            auto assetClass = assetClassBuilder.GetAssetClass();
+
+            if (!assetClass)
+            {
+                return;
+            }
+
+            // add asset class object to map along with weight
+
+            mPortfolio->mAssetClassProportionsMap[assetClass] = assetClassEntry["Weight"].GetFloat();
         }
 
-        // TODO: iterate through asset class map and replace weights with proportions
+        // iterate through asset class map and replace weights with proportions
+
+        for (auto& [object, weight] : mPortfolio->mAssetClassProportionsMap)
+        {
+            weight = weight / totalWeight;
+        }
     }
 
     std::string rebalancingStrategy(portfolioDOM["RebalancingStrategy"].GetString());
