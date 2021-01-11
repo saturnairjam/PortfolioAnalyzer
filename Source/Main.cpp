@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+#include "Portfolio.hpp"
+
 int main(int argc, char** argv)
 {
     // validate command-line argument count
