@@ -9,6 +9,7 @@ set(SOURCES
   "Source/AssetClass.hpp"
   "Source/AssetClassBuilder.hpp"
   "Source/AssetClassBuilder.cpp"
+  "Source/HeatMap.cpp"
   "Source/Main.cpp"
   "Source/Portfolio.cpp"
   "Source/Portfolio.hpp"

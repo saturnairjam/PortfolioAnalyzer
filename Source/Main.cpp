@@ -4,6 +4,8 @@
 
 #include "PortfolioBuilder.hpp"
 
+void HeatMap(std::shared_ptr<Portfolio> portfolio);
+
 int main(int argc, char** argv)
 {
     // validate command-line argument count
@@ -21,6 +23,13 @@ int main(int argc, char** argv)
     auto portfolioBuilder = std::make_shared<PortfolioBuilder>(std::string(argv[1]), std::string(argv[2]));
 
     auto portfolio = portfolioBuilder->GetPortfolio();
+
+    if (!portfolio)
+    {
+        return EXIT_FAILURE;
+    }
+
+    HeatMap(portfolio);
 
     return EXIT_SUCCESS;
 }
