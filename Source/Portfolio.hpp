@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include <map>
 #include <memory>
 #include <string>
@@ -33,7 +34,7 @@ private:
     std::string mName;
 
     Date mStartDate;
-    int mDurationInMonths {0};
+    int mDurationInMonths {std::numeric_limits<int>::max()};
 
     RebalancingStrategy mRebalancingStrategy {RebalancingStrategy::Periodic};
 

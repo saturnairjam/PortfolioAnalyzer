@@ -142,6 +142,35 @@ PortfolioBuilder::PortfolioBuilder(const std::string& assetClassPath, const std:
             // add asset class object to map along with weight
 
             mPortfolio->mAssetClassProportionsMap[assetClass] = assetClassEntry["Weight"].GetFloat();
+
+            // recompute portfolio start date & duration based on asset class start date & duration
+
+            auto portfolioStartDate = (mPortfolio->mStartDate.Year * 12) + (mPortfolio->mStartDate.Month - 1);
+            auto portfolioEndDate = portfolioStartDate + mPortfolio->mDurationInMonths;
+
+            auto assetClassStartDate = (assetClass->GetStartDate().Year * 12) + (assetClass->GetStartDate().Month - 1);
+            auto assetClassEndDate = assetClassStartDate + assetClass->GetDuration();
+
+            if ((assetClassEndDate < portfolioStartDate) || (portfolioEndDate < assetClassStartDate))
+            {
+                std::cerr << "non-overlapping date range\n";
+
+                return;
+            }
+
+            if (assetClassStartDate > portfolioStartDate)
+            {
+                portfolioStartDate = assetClassStartDate;
+            }
+
+            if (assetClassEndDate < portfolioEndDate)
+            {
+                portfolioEndDate = assetClassEndDate;
+            }
+
+            mPortfolio->mStartDate.Year = portfolioStartDate / 12;
+            mPortfolio->mStartDate.Month = (portfolioStartDate % 12) + 1;
+            mPortfolio->mDurationInMonths = portfolioEndDate - portfolioStartDate;
         }
 
         // iterate through asset class map and replace weights with proportions
