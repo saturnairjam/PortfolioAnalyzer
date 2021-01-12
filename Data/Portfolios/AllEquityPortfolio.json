@@ -1,0 +1,13 @@
+{
+    "Name": "All Equity Portfolio",
+    "AssetClassWeights":
+    [
+        {
+            "Name": "NIFTY 50 Total Returns Index",
+            "Weight": 100
+        }
+    ],
+    "RebalancingStrategy": "Periodic",
+    "RebalancingPeriodInMonths": 12,
+    "RebalancingThreshold": 0
+}

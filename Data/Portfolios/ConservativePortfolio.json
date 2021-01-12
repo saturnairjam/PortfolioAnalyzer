@@ -1,0 +1,13 @@
+{
+    "Name": "Conservative Portfolio",
+    "AssetClassWeights":
+    [
+        {
+            "Name": "CRISIL Liquid Fund Index",
+            "Weight": 100
+        }
+    ],
+    "RebalancingStrategy": "Periodic",
+    "RebalancingPeriodInMonths": 12,
+    "RebalancingThreshold": 0
+}

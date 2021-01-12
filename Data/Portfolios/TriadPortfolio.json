@@ -1,0 +1,21 @@
+{
+    "Name": "Triad Portfolio",
+    "AssetClassWeights":
+    [
+        {
+            "Name": "NIFTY 50 Total Returns Index",
+            "Weight": 10
+        },
+        {
+            "Name": "CRISIL Liquid Fund Index",
+            "Weight": 10
+        },
+        {
+            "Name": "Gold Price Per Troy Oz",
+            "Weight": 10
+        }
+    ],
+    "RebalancingStrategy": "Periodic",
+    "RebalancingPeriodInMonths": 12,
+    "RebalancingThreshold": 0
+}

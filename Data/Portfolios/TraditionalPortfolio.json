@@ -1,0 +1,13 @@
+{
+    "Name": "Traditional Portfolio",
+    "AssetClassWeights":
+    [
+        {
+            "Name": "Gold Price Per Troy Oz",
+            "Weight": 100
+        }
+    ],
+    "RebalancingStrategy": "Periodic",
+    "RebalancingPeriodInMonths": 1,
+    "RebalancingThreshold": 0
+}
