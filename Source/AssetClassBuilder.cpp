@@ -15,7 +15,23 @@ AssetClassBuilder::AssetClassBuilder(const rapidjson::Document& dom)
     mAssetClass->mStartDate.Month = dom["StartMonth"].GetInt();
     mAssetClass->mDurationInMonths = dom["NetAssetValueArray"].Size();
 
-    // TODO: load NAVs & compute month-on-month growth
+    // load NAV array & compute month-on-month growth
+
+    float navPrev = 0;
+
+    for (const auto& navEntry : dom["NetAssetValueArray"].GetArray())
+    {
+        auto navCurr = navEntry.GetFloat();
+
+        mAssetClass->mMonthEndNavs.push_back(navCurr);
+
+        if (navPrev)
+        {
+            mAssetClass->mMonthOnMonthGrowth.push_back((navCurr / navPrev) - 1);
+        }
+
+        navPrev = navCurr;
+    }
 
     mConstructedSuccessfully = true;
 }

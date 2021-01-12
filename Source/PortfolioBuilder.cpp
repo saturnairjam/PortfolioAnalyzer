@@ -113,6 +113,8 @@ PortfolioBuilder::PortfolioBuilder(const std::string& assetClassPath, const std:
             std::cout << "AssetClass: Name: " << assetClassEntry["Name"].GetString()
                       << ", Weight: " << assetClassEntry["Weight"].GetInt() << "\n";
 
+            // add asset class weight to total
+
             totalWeight += assetClassEntry["Weight"].GetInt();
 
             // check if asset class exists in map
