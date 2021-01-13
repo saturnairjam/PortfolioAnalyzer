@@ -5,7 +5,7 @@
 
 #include "Portfolio.hpp"
 
-void HeatMap(std::shared_ptr<Portfolio> portfolio)
+std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfolio> portfolio)
 {
     // compute portfolio start date
 
@@ -52,6 +52,10 @@ void HeatMap(std::shared_ptr<Portfolio> portfolio)
     {
         std::vector<float> heatMapRow;
 
+        float normalizedPortfolioValue = 1;
+
+        int monthCounter = 1;
+
         for (auto [runningOffset, rebalancingCounter] = std::tuple {portfolioStartDateOffset, 1};
              runningOffset < (portfolioDuration - 1);
              runningOffset++, rebalancingCounter++)
@@ -69,6 +73,8 @@ void HeatMap(std::shared_ptr<Portfolio> portfolio)
 
                 portfolioGrowth += runningProportion * (1 + assetClassGrowth);
             }
+
+            normalizedPortfolioValue *= portfolioGrowth;
 
             // recompute asset class proportions
 
@@ -108,9 +114,13 @@ void HeatMap(std::shared_ptr<Portfolio> portfolio)
                 rebalancingCounter = 1;
             }
 
-            // save portfolio growth to heat map row vector
+            // compute CAGR
 
-            heatMapRow.push_back(portfolioGrowth - 1);
+            float cagr = std::pow(normalizedPortfolioValue, 12.0f / monthCounter++) - 1;
+
+            // save CAGR to heat map row vector
+
+            heatMapRow.push_back(cagr * 100);
         }
 
         // save heat map row to heat map matrix
@@ -119,4 +129,6 @@ void HeatMap(std::shared_ptr<Portfolio> portfolio)
 
         portfolioStartDateOffset++;
     }
+
+    return std::make_shared<std::vector<std::vector<float>>>(heatMap);
 }

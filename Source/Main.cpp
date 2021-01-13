@@ -1,10 +1,11 @@
 #include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <string>
 
 #include "PortfolioBuilder.hpp"
 
-void HeatMap(std::shared_ptr<Portfolio> portfolio);
+std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfolio> portfolio);
 
 int main(int argc, char** argv)
 {
@@ -29,7 +30,50 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    HeatMap(portfolio);
+    auto heatMap = HeatMap(portfolio);
+
+    // write heat map to CSV file
+
+    std::ofstream outputFile("heatmap.csv");
+
+    if (!outputFile.is_open())
+    {
+        std::cerr << "failed to open output file\n";
+
+        return EXIT_FAILURE;
+    }
+
+    int portfolioStartDate = (portfolio->GetStartDate().Year * 12) + (portfolio->GetStartDate().Month - 1);
+
+    int monthsHeld = portfolio->GetDuration() - 1;
+
+    outputFile << "Start Date";
+
+    for (int ii = 1; ii <= monthsHeld; ii++)
+    {
+        outputFile << ", " << ii;
+    }
+
+    outputFile << "\n";
+
+    for (const auto& row : *heatMap)
+    {
+        int year = portfolioStartDate / 12;
+        int month = (portfolioStartDate % 12) + 1;
+
+        outputFile << year << "-" << month;
+
+        for (const auto& entry : row)
+        {
+            outputFile << ", " << entry << "%";
+        }
+
+        portfolioStartDate++;
+
+        outputFile << "\n";
+    }
+
+    outputFile.close();
 
     return EXIT_SUCCESS;
 }
