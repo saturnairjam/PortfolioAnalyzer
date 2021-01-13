@@ -8,6 +8,6 @@
         }
     ],
     "RebalancingStrategy": "Periodic",
-    "RebalancingPeriodInMonths": 1,
+    "RebalancingPeriodInMonths": 12,
     "RebalancingThreshold": 0
 }

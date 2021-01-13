@@ -1,4 +1,4 @@
-#include <cmath>
+#include <cmath> // for std::fabs()
 #include <iostream>
 #include <tuple>
 #include <vector>
@@ -13,11 +13,9 @@ void HeatMap(std::shared_ptr<Portfolio> portfolio)
 
     // populate vector of tuples containing info for each asset class
 
-    std::vector<std::tuple<std::shared_ptr<AssetClass>, float, int>> assetClasses;
+    std::vector<std::tuple<std::shared_ptr<AssetClass>, float, float, int>> assetClasses;
 
     auto assetClassProportionsMap = portfolio->GetAssetClassProportions();
-
-    std::vector<float> originalProportions;
 
     for (const auto& [assetClass, proportion] : assetClassProportionsMap)
     {
@@ -27,9 +25,7 @@ void HeatMap(std::shared_ptr<Portfolio> portfolio)
 
         int assetClassStartDateOffset = portfolioStartDate - assetClassStartDate;
 
-        assetClasses.push_back(std::make_tuple(assetClass, proportion, assetClassStartDateOffset));
-
-        originalProportions.push_back(proportion);
+        assetClasses.push_back(std::make_tuple(assetClass, proportion, proportion, assetClassStartDateOffset));
     }
 
     // compute number of months held
@@ -64,65 +60,47 @@ void HeatMap(std::shared_ptr<Portfolio> portfolio)
 
             float portfolioGrowth = 0;
 
-            for (const auto& [assetClass, proportion, assetClassStartDateOffset] : assetClasses)
+            for (const auto& [assetClass, runningProportion, originalProportion, assetClassStartDateOffset] :
+                 assetClasses)
             {
                 int offset = assetClassStartDateOffset + runningOffset;
 
                 auto assetClassGrowth = assetClass->GetMonthOnMonthGrowth()[offset];
 
-                portfolioGrowth += proportion * (1 + assetClassGrowth);
+                portfolioGrowth += runningProportion * (1 + assetClassGrowth);
             }
 
             // recompute asset class proportions
 
             bool thresholdExceeded = false;
 
-            for (auto& [assetClass, proportion, assetClassStartDateOffset] : assetClasses)
+            for (auto& [assetClass, runningProportion, originalProportion, assetClassStartDateOffset] : assetClasses)
             {
                 int offset = assetClassStartDateOffset + runningOffset;
 
                 auto assetClassGrowth = assetClass->GetMonthOnMonthGrowth()[offset];
 
-                auto newProportion = proportion * (1 + assetClassGrowth) / portfolioGrowth;
+                runningProportion *= (1 + assetClassGrowth) / portfolioGrowth;
 
                 // check if rebalancing threshold is exceeded
 
-                if (std::fabs((newProportion / proportion) - 1) > rebalancingThreshold)
+                if (std::fabs((runningProportion / originalProportion) - 1) > rebalancingThreshold)
                 {
                     thresholdExceeded = true;
                 }
-
-                proportion = newProportion;
             }
 
             // determine whether to rebalance
 
-            bool rebalance = false;
-
-            if (rebalancingStrategy == RebalancingStrategy::Periodic)
-            {
-                if ((rebalancingCounter % rebalancingPeriod) == 0)
-                {
-                    rebalance = true;
-                }
-            }
-            else
-            {
-                if (thresholdExceeded)
-                {
-                    rebalance = true;
-                }
-            }
-
-            if (rebalance)
+            if (((rebalancingStrategy == RebalancingStrategy::Periodic) &&
+                 ((rebalancingCounter % rebalancingPeriod) == 0)) ||
+                ((rebalancingStrategy == RebalancingStrategy::Threshold) && thresholdExceeded))
             {
                 // reset asset class proportions to original values
 
-                int ii = 0;
-
-                for (auto& [assetClass, proportion, offset] : assetClasses)
+                for (auto& [assetClass, runningProportion, originalProportion, offset] : assetClasses)
                 {
-                    proportion = originalProportions[ii];
+                    runningProportion = originalProportion;
                 }
 
                 // reset rebalancing counter
