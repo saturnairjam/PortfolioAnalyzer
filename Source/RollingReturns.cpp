@@ -1,8 +1,9 @@
-#include "RollingReturns.hpp"
 #include <fstream>
 #include <iostream>
 #include <memory> // for std::shared_ptr
 #include <vector>
+
+#include "Portfolio.hpp"
 
 std::shared_ptr<std::vector<std::vector<float>>>
 RollingReturns(const std::shared_ptr<std::vector<std::vector<float>>> heatMap)

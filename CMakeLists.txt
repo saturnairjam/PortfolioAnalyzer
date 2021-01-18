@@ -12,6 +12,8 @@ set(SOURCES
   "Source/HeatMap.cpp"
   "Source/HeatMap.hpp"
   "Source/Main.cpp"
+  "Source/Percentile.cpp"
+  "Source/Percentile.hpp"
   "Source/Portfolio.cpp"
   "Source/Portfolio.hpp"
   "Source/PortfolioBuilder.cpp"
