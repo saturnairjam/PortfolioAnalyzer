@@ -50,13 +50,16 @@ std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfol
 
     while (monthsHeld-- > 0)
     {
+        std::cout << (portfolioStartDate + portfolioStartDateOffset) / 12 << "-"
+                  << ((portfolioStartDate + portfolioStartDateOffset) % 12) + 1 << ":";
+
         std::vector<float> heatMapRow;
 
         float normalizedPortfolioValue = 1;
 
         int monthCounter = 1;
 
-        for (auto [runningOffset, rebalancingCounter] = std::tuple {portfolioStartDateOffset, 1};
+        for (auto [runningOffset, rebalancingCounter] = std::tuple {portfolioStartDateOffset, 0};
              runningOffset < (portfolioDuration - 1);
              runningOffset++, rebalancingCounter++)
         {
@@ -90,18 +93,23 @@ std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfol
 
                 // check if rebalancing threshold is exceeded
 
-                if (std::fabs((runningProportion / originalProportion) - 1) > rebalancingThreshold)
+                if (std::fabs(runningProportion - originalProportion) > rebalancingThreshold)
                 {
                     thresholdExceeded = true;
+
+                    break;
                 }
             }
 
             // determine whether to rebalance
 
-            if (((rebalancingStrategy == RebalancingStrategy::Periodic) &&
+            if (((rebalancingStrategy == RebalancingStrategy::Periodic) && (runningOffset > portfolioStartDateOffset) &&
                  ((rebalancingCounter % rebalancingPeriod) == 0)) ||
                 ((rebalancingStrategy == RebalancingStrategy::Threshold) && thresholdExceeded))
             {
+                std::cout << " " << (portfolioStartDate + runningOffset) / 12 << "-"
+                          << ((portfolioStartDate + runningOffset) % 12) + 1;
+
                 // reset asset class proportions to original values
 
                 for (auto& [assetClass, runningProportion, originalProportion, offset] : assetClasses)
@@ -111,7 +119,7 @@ std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfol
 
                 // reset rebalancing counter
 
-                rebalancingCounter = 1;
+                rebalancingCounter = 0;
             }
 
             // compute CAGR
@@ -128,6 +136,8 @@ std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfol
         heatMap.push_back(heatMapRow);
 
         portfolioStartDateOffset++;
+
+        std::cout << "\n";
     }
 
     return std::make_shared<std::vector<std::vector<float>>>(heatMap);

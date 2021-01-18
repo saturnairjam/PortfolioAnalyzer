@@ -181,6 +181,9 @@ PortfolioBuilder::PortfolioBuilder(const std::string& assetClassPath, const std:
         }
     }
 
+    std::cout << "Start Date: " << mPortfolio->mStartDate.Year << "-" << mPortfolio->mStartDate.Month << "\n";
+    std::cout << "Duration: " << mPortfolio->mDurationInMonths << "\n";
+
     std::string rebalancingStrategy(portfolioDOM["RebalancingStrategy"].GetString());
 
     if (rebalancingStrategy == "Periodic")
