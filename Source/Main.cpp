@@ -1,13 +1,10 @@
 #include <cstdlib>
-#include <fstream>
 #include <iostream>
 #include <string>
 
+#include "HeatMap.hpp"
 #include "PortfolioBuilder.hpp"
-
-std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfolio> portfolio);
-std::shared_ptr<std::vector<std::vector<float>>>
-RollingReturns(const std::shared_ptr<std::vector<std::vector<float>>> heatMap);
+#include "RollingReturns.hpp"
 
 int main(int argc, char** argv)
 {
@@ -38,50 +35,22 @@ int main(int argc, char** argv)
 
     // write heat map to CSV file
 
-    std::ofstream outputFile("heatmap.csv");
-
-    if (!outputFile.is_open())
+    if (const auto result = WriteHeatMapToCSV(portfolio, heatMap, "heatmap.csv"); result != EXIT_SUCCESS)
     {
-        std::cerr << "failed to open output file\n";
-
-        return EXIT_FAILURE;
+        return result;
     }
-
-    int portfolioStartDate = (portfolio->GetStartDate().Year * 12) + (portfolio->GetStartDate().Month - 1);
-
-    int monthsHeld = portfolio->GetDuration() - 1;
-
-    outputFile << "Start Date";
-
-    for (int ii = 1; ii <= monthsHeld; ii++)
-    {
-        outputFile << ", " << ii;
-    }
-
-    outputFile << "\n";
-
-    for (const auto& row : *heatMap)
-    {
-        int year = portfolioStartDate / 12;
-        int month = (portfolioStartDate % 12) + 1;
-
-        outputFile << year << "-" << month;
-
-        for (const auto& entry : row)
-        {
-            outputFile << ", " << entry << "%";
-        }
-
-        portfolioStartDate++;
-
-        outputFile << "\n";
-    }
-
-    outputFile.close();
 
     // compute rolling returns
 
     auto rollingReturns = RollingReturns(heatMap);
+
+    // write rolling returns to CSV file
+
+    if (const auto result = WriteRollingReturnsToCSV(portfolio, rollingReturns, "rollingreturns.csv");
+        result != EXIT_SUCCESS)
+    {
+        return result;
+    }
 
     return EXIT_SUCCESS;
 }

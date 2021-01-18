@@ -1,3 +1,6 @@
+#include "RollingReturns.hpp"
+#include <fstream>
+#include <iostream>
 #include <memory> // for std::shared_ptr
 #include <vector>
 
@@ -26,4 +29,50 @@ RollingReturns(const std::shared_ptr<std::vector<std::vector<float>>> heatMap)
     }
 
     return std::make_shared<std::vector<std::vector<float>>>(rollingReturns);
+}
+
+int WriteRollingReturnsToCSV(
+    const std::shared_ptr<Portfolio> portfolio,
+    const std::shared_ptr<std::vector<std::vector<float>>> rollingReturns,
+    const std::string& filename)
+{
+    std::ofstream outputFile(filename);
+
+    if (!outputFile.is_open())
+    {
+        std::cerr << "failed to open output file\n";
+
+        return EXIT_FAILURE;
+    }
+
+    outputFile << ", Start Date\n";
+
+    outputFile << "Years Held";
+
+    int portfolioStartDate = (portfolio->GetStartDate().Year * 12) + (portfolio->GetStartDate().Month - 1);
+
+    for (int ii = 0; ii < rollingReturns->at(0).size(); ii++, portfolioStartDate++)
+    {
+        outputFile << ", " << (portfolioStartDate / 12) << "-" << ((portfolioStartDate % 12) + 1);
+    }
+
+    outputFile << "\n";
+
+    int yearsHeld = 1;
+
+    for (const auto& row : *rollingReturns)
+    {
+        outputFile << yearsHeld++;
+
+        for (const auto& entry : row)
+        {
+            outputFile << ", " << entry;
+        }
+
+        outputFile << "\n";
+    }
+
+    outputFile.close();
+
+    return EXIT_SUCCESS;
 }

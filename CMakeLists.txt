@@ -10,12 +10,14 @@ set(SOURCES
   "Source/AssetClassBuilder.hpp"
   "Source/AssetClassBuilder.cpp"
   "Source/HeatMap.cpp"
+  "Source/HeatMap.hpp"
   "Source/Main.cpp"
   "Source/Portfolio.cpp"
   "Source/Portfolio.hpp"
   "Source/PortfolioBuilder.cpp"
   "Source/PortfolioBuilder.hpp"
   "Source/RollingReturns.cpp"
+  "Source/RollingReturns.hpp"
   "Source/Types.hpp")
 
 set(PRIVATE_INCLUDE_DIRECTORIES
