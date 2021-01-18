@@ -15,6 +15,7 @@ set(SOURCES
   "Source/Portfolio.hpp"
   "Source/PortfolioBuilder.cpp"
   "Source/PortfolioBuilder.hpp"
+  "Source/RollingReturns.cpp"
   "Source/Types.hpp")
 
 set(PRIVATE_INCLUDE_DIRECTORIES

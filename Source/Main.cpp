@@ -6,6 +6,8 @@
 #include "PortfolioBuilder.hpp"
 
 std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfolio> portfolio);
+std::shared_ptr<std::vector<std::vector<float>>>
+RollingReturns(const std::shared_ptr<std::vector<std::vector<float>>> heatMap);
 
 int main(int argc, char** argv)
 {
@@ -29,6 +31,8 @@ int main(int argc, char** argv)
     {
         return EXIT_FAILURE;
     }
+
+    // compute heat map
 
     auto heatMap = HeatMap(portfolio);
 
@@ -74,6 +78,10 @@ int main(int argc, char** argv)
     }
 
     outputFile.close();
+
+    // compute rolling returns
+
+    auto rollingReturns = RollingReturns(heatMap);
 
     return EXIT_SUCCESS;
 }
