@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 
+#include "Drawdowns.hpp"
 #include "HeatMap.hpp"
 #include "Percentile.hpp"
 #include "PortfolioBuilder.hpp"
@@ -53,6 +54,16 @@ int main(int argc, char** argv)
     {
         return result;
     }
+
+    // compute drawdowns
+
+    auto [deepestDrawdown, longestDrawdown, ulcerIndex] = Drawdowns((*heatMap)[0]);
+
+    std::cout << "Deepest Drawdown: " << deepestDrawdown << "\n";
+    std::cout << "Longest Drawdown: " << longestDrawdown << "\n";
+    std::cout << "Ulcer Index: " << ulcerIndex << "\n";
+
+    // print stats of 10-year rolling returns
 
     {
         auto tenYearRollingReturns = rollingReturns->at(9);

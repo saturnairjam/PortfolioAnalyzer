@@ -7,8 +7,10 @@ project(PortfolioAnalyzer
 set(SOURCES
   "Source/AssetClass.cpp"
   "Source/AssetClass.hpp"
-  "Source/AssetClassBuilder.hpp"
   "Source/AssetClassBuilder.cpp"
+  "Source/AssetClassBuilder.hpp"
+  "Source/Drawdowns.cpp"
+  "Source/Drawdowns.hpp"
   "Source/HeatMap.cpp"
   "Source/HeatMap.hpp"
   "Source/Main.cpp"
