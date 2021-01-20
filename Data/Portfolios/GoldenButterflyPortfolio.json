@@ -23,7 +23,7 @@
             "Weight": 20
         }
     ],
-    "RebalancingStrategy": "Periodic",
-    "RebalancingPeriodInMonths": 12,
-    "RebalancingThreshold": 0
+    "RebalancingStrategy": "Threshold",
+    "RebalancingPeriodInMonths": 1,
+    "RebalancingThreshold": 5
 }

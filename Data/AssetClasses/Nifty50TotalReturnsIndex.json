@@ -2,7 +2,6 @@
     "Name": "NIFTY 50 Total Returns Index",
     "StartYear": 1999,
     "StartMonth": 6,
-    "Currency": "INR",
     "NetAssetValueArray":
     [
         1256.38,

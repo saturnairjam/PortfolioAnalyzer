@@ -2,7 +2,6 @@
     "Name": "CRISIL 10-year GILT Index",
     "StartYear": 2001,
     "StartMonth": 9,
-    "Currency": "INR",
     "NetAssetValueArray":
     [
         1008.78,

@@ -52,8 +52,8 @@ std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfol
 
     while (monthsHeld-- > 0)
     {
-        std::cout << (portfolioStartDate + portfolioStartDateOffset) / 12 << "-"
-                  << ((portfolioStartDate + portfolioStartDateOffset) % 12) + 1 << ":";
+        //std::cout << (portfolioStartDate + portfolioStartDateOffset) / 12 << "-"
+        //          << ((portfolioStartDate + portfolioStartDateOffset) % 12) + 1 << ":";
 
         std::vector<float> heatMapRow;
 
@@ -109,8 +109,8 @@ std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfol
                  ((rebalancingCounter % rebalancingPeriod) == 0)) ||
                 ((rebalancingStrategy == RebalancingStrategy::Threshold) && thresholdExceeded))
             {
-                std::cout << " " << (portfolioStartDate + runningOffset) / 12 << "-"
-                          << ((portfolioStartDate + runningOffset) % 12) + 1;
+                //std::cout << " " << (portfolioStartDate + runningOffset) / 12 << "-"
+                //          << ((portfolioStartDate + runningOffset) % 12) + 1;
 
                 // reset asset class proportions to original values
 
@@ -139,7 +139,7 @@ std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfol
 
         portfolioStartDateOffset++;
 
-        std::cout << "\n";
+        //std::cout << "\n";
     }
 
     return std::make_shared<std::vector<std::vector<float>>>(heatMap);

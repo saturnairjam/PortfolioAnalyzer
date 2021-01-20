@@ -2,7 +2,6 @@
     "Name": "Gold Price Per Troy Oz",
     "StartYear": 1979,
     "StartMonth": 1,
-    "Currency": "INR",
     "NetAssetValueArray":
     [
         1840.8,

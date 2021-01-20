@@ -2,7 +2,6 @@
     "Name": "CRISIL Liquid Fund Index",
     "StartYear": 2002,
     "StartMonth": 3,
-    "Currency": "INR",
     "NetAssetValueArray":
     [
         1000,
