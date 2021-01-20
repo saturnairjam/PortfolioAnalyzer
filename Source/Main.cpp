@@ -57,11 +57,18 @@ int main(int argc, char** argv)
 
     // compute drawdowns
 
-    auto [deepestDrawdown, longestDrawdown, ulcerIndex] = Drawdowns(heatMap[0]);
+    auto [drawdowns, deepestDrawdown, longestDrawdown, ulcerIndex] = Drawdowns(heatMap[0]);
 
-    std::cout << "Deepest Drawdown: " << deepestDrawdown << "\n";
-    std::cout << "Longest Drawdown: " << longestDrawdown << "\n";
+    std::cout << "Deepest Drawdown: " << deepestDrawdown << " %\n";
+    std::cout << "Longest Drawdown: " << longestDrawdown << " months\n";
     std::cout << "Ulcer Index: " << ulcerIndex << "\n";
+
+    // write drawdowns to CSV file
+
+    if (const auto result = WriteDrawdownsToCSV(portfolio, drawdowns, "drawdowns.csv"); result != EXIT_SUCCESS)
+    {
+        return result;
+    }
 
     // print stats of 10-year rolling returns
 
