@@ -1,12 +1,11 @@
 #include <fstream>
 #include <iostream>
-#include <memory> // for std::shared_ptr
+#include <memory>
 #include <vector>
 
 #include "Portfolio.hpp"
 
-std::shared_ptr<std::vector<std::vector<float>>>
-RollingReturns(const std::shared_ptr<std::vector<std::vector<float>>> heatMap)
+std::vector<std::vector<float>> RollingReturns(const std::vector<std::vector<float>>& heatMap)
 {
     // declare rolling returns matrix
 
@@ -14,7 +13,7 @@ RollingReturns(const std::shared_ptr<std::vector<std::vector<float>>> heatMap)
 
     // iterate over each row in heat map (corresponds to a given start date)
 
-    for (const auto& heatMapRow : *heatMap)
+    for (const auto& heatMapRow : heatMap)
     {
         // access yearly heat map returns
 
@@ -29,12 +28,12 @@ RollingReturns(const std::shared_ptr<std::vector<std::vector<float>>> heatMap)
         }
     }
 
-    return std::make_shared<std::vector<std::vector<float>>>(rollingReturns);
+    return rollingReturns;
 }
 
 int WriteRollingReturnsToCSV(
     const std::shared_ptr<Portfolio> portfolio,
-    const std::shared_ptr<std::vector<std::vector<float>>> rollingReturns,
+    const std::vector<std::vector<float>>& rollingReturns,
     const std::string& filename)
 {
     std::ofstream outputFile(filename);
@@ -52,7 +51,7 @@ int WriteRollingReturnsToCSV(
 
     int portfolioStartDate = (portfolio->GetStartDate().Year * 12) + (portfolio->GetStartDate().Month - 1);
 
-    for (int ii = 0; ii < rollingReturns->at(0).size(); ii++, portfolioStartDate++)
+    for (int ii = 0; ii < rollingReturns[0].size(); ii++, portfolioStartDate++)
     {
         outputFile << ", " << (portfolioStartDate / 12) << "-" << ((portfolioStartDate % 12) + 1);
     }
@@ -61,7 +60,7 @@ int WriteRollingReturnsToCSV(
 
     int yearsHeld = 1;
 
-    for (const auto& row : *rollingReturns)
+    for (const auto& row : rollingReturns)
     {
         outputFile << yearsHeld++;
 

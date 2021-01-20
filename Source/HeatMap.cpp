@@ -7,7 +7,7 @@
 #include "Portfolio.hpp"
 #include "HeatMap.hpp"
 
-std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfolio> portfolio)
+std::vector<std::vector<float>> HeatMap(std::shared_ptr<Portfolio> portfolio)
 {
     // compute portfolio start date
 
@@ -142,12 +142,12 @@ std::shared_ptr<std::vector<std::vector<float>>> HeatMap(std::shared_ptr<Portfol
         //std::cout << "\n";
     }
 
-    return std::make_shared<std::vector<std::vector<float>>>(heatMap);
+    return heatMap;
 }
 
 int WriteHeatMapToCSV(
     const std::shared_ptr<Portfolio> portfolio,
-    std::shared_ptr<std::vector<std::vector<float>>> heatMap,
+    const std::vector<std::vector<float>>& heatMap,
     const std::string& filename)
 {
     std::ofstream outputFile(filename);
@@ -174,7 +174,7 @@ int WriteHeatMapToCSV(
 
     outputFile << "\n";
 
-    for (const auto& row : *heatMap)
+    for (const auto& row : heatMap)
     {
         outputFile << (portfolioStartDate / 12) << "-" << ((portfolioStartDate % 12) + 1);
 

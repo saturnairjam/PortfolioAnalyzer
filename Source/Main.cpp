@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
     // compute drawdowns
 
-    auto [deepestDrawdown, longestDrawdown, ulcerIndex] = Drawdowns((*heatMap)[0]);
+    auto [deepestDrawdown, longestDrawdown, ulcerIndex] = Drawdowns(heatMap[0]);
 
     std::cout << "Deepest Drawdown: " << deepestDrawdown << "\n";
     std::cout << "Longest Drawdown: " << longestDrawdown << "\n";
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
     // print stats of 10-year rolling returns
 
     {
-        auto tenYearRollingReturns = rollingReturns->at(9);
+        auto tenYearRollingReturns = rollingReturns[9];
 
         std::sort(tenYearRollingReturns.begin(), tenYearRollingReturns.end());
 
