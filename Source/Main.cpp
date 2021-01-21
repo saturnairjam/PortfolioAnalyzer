@@ -55,7 +55,18 @@ int main(int argc, char** argv)
         return result;
     }
 
-    // compute drawdowns
+    // compute & print baseline 10-year return
+
+    float baselineReturn;
+
+    if (const auto result = Percentile(rollingReturns[9], 0.15f, baselineReturn); result != EXIT_SUCCESS)
+    {
+        return result;
+    }
+
+    std::cout << "Baseline 10-year Return: " << baselineReturn << " %\n";
+
+    // compute & print drawdown stats
 
     auto [drawdowns, deepestDrawdown, longestDrawdown, ulcerIndex] = Drawdowns(heatMap[0]);
 
@@ -68,37 +79,6 @@ int main(int argc, char** argv)
     if (const auto result = WriteDrawdownsToCSV(portfolio, drawdowns, "drawdowns.csv"); result != EXIT_SUCCESS)
     {
         return result;
-    }
-
-    // print stats of 10-year rolling returns
-
-    {
-        auto tenYearRollingReturns = rollingReturns[9];
-
-        std::sort(tenYearRollingReturns.begin(), tenYearRollingReturns.end());
-
-        auto min = tenYearRollingReturns[0];
-        auto max = tenYearRollingReturns[tenYearRollingReturns.size() - 1];
-
-        float baseline, median, stretch;
-
-        if (const auto result = Percentile(tenYearRollingReturns, 0.15f, baseline); result != EXIT_SUCCESS)
-        {
-            return result;
-        }
-
-        if (const auto result = Percentile(tenYearRollingReturns, 0.50f, median); result != EXIT_SUCCESS)
-        {
-            return result;
-        }
-
-        if (const auto result = Percentile(tenYearRollingReturns, 0.85f, stretch); result != EXIT_SUCCESS)
-        {
-            return result;
-        }
-
-        std::cout << "10-year rolling returns: " << min << ", " << baseline << ", " << median << ", " << stretch << ", "
-                  << max << "\n";
     }
 
     return EXIT_SUCCESS;
