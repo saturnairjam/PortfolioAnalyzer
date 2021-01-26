@@ -34,3 +34,8 @@ const std::map<std::shared_ptr<AssetClass>, float>& Portfolio::GetAssetClassProp
 {
     return mAssetClassProportionsMap;
 }
+
+const std::shared_ptr<AssetClass> Portfolio::GetInflation()
+{
+    return mInflation;
+}

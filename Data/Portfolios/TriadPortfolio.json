@@ -15,6 +15,7 @@
             "Weight": 10
         }
     ],
+    "InflationAdjusted": true,
     "RebalancingStrategy": "Threshold",
     "RebalancingPeriodInMonths": 1,
     "RebalancingThreshold": 10

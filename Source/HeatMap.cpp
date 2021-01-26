@@ -4,8 +4,8 @@
 #include <tuple>
 #include <vector>
 
-#include "Portfolio.hpp"
 #include "HeatMap.hpp"
+#include "Portfolio.hpp"
 
 std::vector<std::vector<float>> HeatMap(const std::shared_ptr<Portfolio>& portfolio)
 {
@@ -17,7 +17,7 @@ std::vector<std::vector<float>> HeatMap(const std::shared_ptr<Portfolio>& portfo
 
     std::vector<std::tuple<std::shared_ptr<AssetClass>, float, float, int>> assetClasses;
 
-    auto assetClassProportionsMap = portfolio->GetAssetClassProportions();
+    auto& assetClassProportionsMap = portfolio->GetAssetClassProportions();
 
     for (const auto& [assetClass, proportion] : assetClassProportionsMap)
     {
@@ -28,6 +28,19 @@ std::vector<std::vector<float>> HeatMap(const std::shared_ptr<Portfolio>& portfo
         int assetClassStartDateOffset = portfolioStartDate - assetClassStartDate;
 
         assetClasses.push_back(std::make_tuple(assetClass, proportion, proportion, assetClassStartDateOffset));
+    }
+
+    // compute inflation start date & offset
+
+    auto inflation = portfolio->GetInflation();
+
+    int inflationStartDate = 0, inflationStartDateOffset = 0;
+
+    if (inflation)
+    {
+        inflationStartDate = (inflation->GetStartDate().Year * 12) + (inflation->GetStartDate().Month - 1);
+
+        inflationStartDateOffset = portfolioStartDate - inflationStartDate;
     }
 
     // compute number of months held
@@ -52,7 +65,7 @@ std::vector<std::vector<float>> HeatMap(const std::shared_ptr<Portfolio>& portfo
 
     while (monthsHeld-- > 0)
     {
-        //std::cout << (portfolioStartDate + portfolioStartDateOffset) / 12 << "-"
+        // std::cout << (portfolioStartDate + portfolioStartDateOffset) / 12 << "-"
         //          << ((portfolioStartDate + portfolioStartDateOffset) % 12) + 1 << ":";
 
         std::vector<float> heatMapRow;
@@ -109,7 +122,7 @@ std::vector<std::vector<float>> HeatMap(const std::shared_ptr<Portfolio>& portfo
                  ((rebalancingCounter % rebalancingPeriod) == 0)) ||
                 ((rebalancingStrategy == RebalancingStrategy::Threshold) && thresholdExceeded))
             {
-                //std::cout << " " << (portfolioStartDate + runningOffset) / 12 << "-"
+                // std::cout << " " << (portfolioStartDate + runningOffset) / 12 << "-"
                 //          << ((portfolioStartDate + runningOffset) % 12) + 1;
 
                 // reset asset class proportions to original values
@@ -122,6 +135,21 @@ std::vector<std::vector<float>> HeatMap(const std::shared_ptr<Portfolio>& portfo
                 // reset rebalancing counter
 
                 rebalancingCounter = 0;
+            }
+
+            // adjust for inflation
+
+            if (inflation)
+            {
+                int offset = inflationStartDateOffset + runningOffset;
+
+                auto inflationValue = inflation->GetMonthEndNavs()[offset];
+
+                normalizedPortfolioValue /= portfolioGrowth; // reset
+
+                portfolioGrowth /= (1 + inflationValue);
+
+                normalizedPortfolioValue *= portfolioGrowth;
             }
 
             // compute CAGR
@@ -139,7 +167,7 @@ std::vector<std::vector<float>> HeatMap(const std::shared_ptr<Portfolio>& portfo
 
         portfolioStartDateOffset++;
 
-        //std::cout << "\n";
+        // std::cout << "\n";
     }
 
     return heatMap;

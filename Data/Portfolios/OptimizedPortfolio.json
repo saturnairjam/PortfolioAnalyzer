@@ -1,5 +1,5 @@
 {
-    "Name": "Permanent Portfolio",
+    "Name": "Optimized Portfolio",
     "AssetClassWeights":
     [
         {
@@ -11,11 +11,11 @@
             "Weight": 25
         },
         {
-            "Name": "CRISIL 10-year GILT Index",
+            "Name": "Gold Price Per Troy Oz",
             "Weight": 25
         },
         {
-            "Name": "Gold Price Per Troy Oz",
+            "Name": "NASDAQ 100 Total Returns Index",
             "Weight": 25
         }
     ],

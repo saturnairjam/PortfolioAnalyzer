@@ -26,6 +26,8 @@ public:
 
     const std::map<std::shared_ptr<AssetClass>, float>& GetAssetClassProportions();
 
+    const std::shared_ptr<AssetClass> GetInflation();
+
     friend class PortfolioBuilder;
 
 private:
@@ -42,4 +44,6 @@ private:
     int mRebalancingThreshold {0};
 
     std::map<std::shared_ptr<AssetClass>, float> mAssetClassProportionsMap;
+
+    std::shared_ptr<AssetClass> mInflation;
 };

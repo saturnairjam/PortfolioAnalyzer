@@ -181,8 +181,72 @@ PortfolioBuilder::PortfolioBuilder(const std::string& assetClassPath, const std:
         }
     }
 
+    // check if portfolio returns need to be inflation adjusted
+
+    if (portfolioDOM.HasMember("InflationAdjusted") && (portfolioDOM["InflationAdjusted"].GetBool()))
+    {
+        std::cout << "Inflation Adjusted: true\n";
+
+        // search for inflation in list of asset classes
+
+        auto it = assetClassDomMap.find("Inflation");
+
+        if (it == assetClassDomMap.end())
+        {
+            std::cerr << "Inflation data missing\n";
+
+            return;
+        }
+
+        // create 'inflation' asset class
+
+        AssetClassBuilder assetClassBuilder(it->second);
+
+        auto inflation = assetClassBuilder.GetAssetClass();
+
+        if (!inflation)
+        {
+            return;
+        }
+
+        // recompute portfolio start date & duration based on inflation start date & duration
+
+        auto portfolioStartDate = (mPortfolio->mStartDate.Year * 12) + (mPortfolio->mStartDate.Month - 1);
+        auto portfolioEndDate = portfolioStartDate + mPortfolio->mDurationInMonths;
+
+        auto assetClassStartDate = (inflation->GetStartDate().Year * 12) + (inflation->GetStartDate().Month - 1);
+        auto assetClassEndDate = assetClassStartDate + inflation->GetDuration();
+
+        if ((assetClassEndDate < portfolioStartDate) || (portfolioEndDate < assetClassStartDate))
+        {
+            std::cerr << "non-overlapping date range\n";
+
+            return;
+        }
+
+        if (assetClassStartDate > portfolioStartDate)
+        {
+            portfolioStartDate = assetClassStartDate;
+        }
+
+        if (assetClassEndDate < portfolioEndDate)
+        {
+            portfolioEndDate = assetClassEndDate;
+        }
+
+        mPortfolio->mStartDate.Year = portfolioStartDate / 12;
+        mPortfolio->mStartDate.Month = (portfolioStartDate % 12) + 1;
+        mPortfolio->mDurationInMonths = portfolioEndDate - portfolioStartDate;
+
+        // store 'inflation' asset class in portfolio
+
+        mPortfolio->mInflation = inflation;
+    }
+
     std::cout << "Start Date: " << mPortfolio->mStartDate.Year << "-" << mPortfolio->mStartDate.Month << "\n";
     std::cout << "Duration: " << mPortfolio->mDurationInMonths << "\n";
+
+    // parse rebalancing strategy parameters
 
     std::string rebalancingStrategy(portfolioDOM["RebalancingStrategy"].GetString());
 
