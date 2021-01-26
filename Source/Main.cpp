@@ -23,6 +23,8 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
+    // construct portfolio object using builder class
+
     auto portfolioBuilder = std::make_shared<PortfolioBuilder>(std::string(argv[1]), std::string(argv[2]));
 
     auto portfolio = portfolioBuilder->GetPortfolio();

@@ -59,7 +59,7 @@ std::tuple<std::vector<float>, float, int, float> Drawdowns(const std::vector<fl
 }
 
 int WriteDrawdownsToCSV(
-    const std::shared_ptr<Portfolio> portfolio,
+    const std::shared_ptr<Portfolio>& portfolio,
     const std::vector<float>& drawdowns,
     const std::string& filename)
 {

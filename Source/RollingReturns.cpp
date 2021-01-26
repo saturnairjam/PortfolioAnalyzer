@@ -32,7 +32,7 @@ std::vector<std::vector<float>> RollingReturns(const std::vector<std::vector<flo
 }
 
 int WriteRollingReturnsToCSV(
-    const std::shared_ptr<Portfolio> portfolio,
+    const std::shared_ptr<Portfolio>& portfolio,
     const std::vector<std::vector<float>>& rollingReturns,
     const std::string& filename)
 {
