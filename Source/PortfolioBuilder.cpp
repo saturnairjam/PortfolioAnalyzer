@@ -244,13 +244,17 @@ PortfolioBuilder::PortfolioBuilder(const std::string& assetClassPath, const std:
     }
 
     std::cout << "Start Date: " << mPortfolio->mStartDate.Year << "-" << mPortfolio->mStartDate.Month << "\n";
-    std::cout << "Duration: " << mPortfolio->mDurationInMonths << "\n";
+    std::cout << "Duration In Months: " << mPortfolio->mDurationInMonths << "\n";
 
     // parse rebalancing strategy parameters
 
     std::string rebalancingStrategy(portfolioDOM["RebalancingStrategy"].GetString());
 
-    if (rebalancingStrategy == "Periodic")
+    if (rebalancingStrategy == "None")
+    {
+        mPortfolio->mRebalancingStrategy = RebalancingStrategy::None;
+    }
+    else if (rebalancingStrategy == "Periodic")
     {
         mPortfolio->mRebalancingStrategy = RebalancingStrategy::Periodic;
     }
@@ -265,29 +269,32 @@ PortfolioBuilder::PortfolioBuilder(const std::string& assetClassPath, const std:
         return;
     }
 
-    std::cout << "RebalancingStrategy: " << rebalancingStrategy << "\n";
+    std::cout << "Rebalancing Strategy: " << rebalancingStrategy << "\n";
 
-    mPortfolio->mRebalancingPeriodInMonths = portfolioDOM["RebalancingPeriodInMonths"].GetInt();
-
-    if (mPortfolio->mRebalancingPeriodInMonths < 0)
+    if (mPortfolio->mRebalancingStrategy != RebalancingStrategy::None)
     {
-        std::cerr << "invalid rebalancing period: " << mPortfolio->mRebalancingPeriodInMonths << "\n";
+        mPortfolio->mRebalancingPeriodInMonths = portfolioDOM["RebalancingPeriodInMonths"].GetInt();
 
-        return;
+        if (mPortfolio->mRebalancingPeriodInMonths < 0)
+        {
+            std::cerr << "invalid rebalancing period: " << mPortfolio->mRebalancingPeriodInMonths << "\n";
+
+            return;
+        }
+
+        std::cout << "Rebalancing Period In Months: " << mPortfolio->mRebalancingPeriodInMonths << "\n";
+
+        mPortfolio->mRebalancingThreshold = portfolioDOM["RebalancingThreshold"].GetInt();
+
+        if (mPortfolio->mRebalancingThreshold < 0)
+        {
+            std::cerr << "invalid rebalancing threshold: " << mPortfolio->mRebalancingThreshold << "\n";
+
+            return;
+        }
+
+        std::cout << "Rebalancing Threshold: " << mPortfolio->mRebalancingThreshold << "\n";
     }
-
-    std::cout << "RebalancingPeriodInMonths: " << mPortfolio->mRebalancingPeriodInMonths << "\n";
-
-    mPortfolio->mRebalancingThreshold = portfolioDOM["RebalancingThreshold"].GetInt();
-
-    if (mPortfolio->mRebalancingThreshold < 0)
-    {
-        std::cerr << "invalid rebalancing threshold: " << mPortfolio->mRebalancingThreshold << "\n";
-
-        return;
-    }
-
-    std::cout << "RebalancingThreshold: " << mPortfolio->mRebalancingThreshold << "\n";
 
     mConstructedSuccessfully = true;
 }

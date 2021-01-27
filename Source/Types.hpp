@@ -8,6 +8,7 @@ struct Date
 
 enum class RebalancingStrategy
 {
+    None,
     Periodic,
     Threshold
 };
