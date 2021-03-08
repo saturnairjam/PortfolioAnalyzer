@@ -38,7 +38,7 @@ private:
     Date mStartDate;
     int mDurationInMonths {std::numeric_limits<int>::max()};
 
-    RebalancingStrategy mRebalancingStrategy {RebalancingStrategy::Periodic};
+    RebalancingStrategy mRebalancingStrategy {RebalancingStrategy::None};
 
     int mRebalancingPeriodInMonths {12};
     int mRebalancingThreshold {0};

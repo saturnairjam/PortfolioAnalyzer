@@ -4,10 +4,10 @@
 #include <tuple>
 #include <vector>
 
-#include "HeatMap.hpp"
+#include "CagrHeatMap.hpp"
 #include "Portfolio.hpp"
 
-std::vector<std::vector<float>> HeatMap(const std::shared_ptr<Portfolio>& portfolio)
+std::vector<std::vector<float>> CagrHeatMap(const std::shared_ptr<Portfolio>& portfolio)
 {
     // compute portfolio start date
 

@@ -6,7 +6,7 @@
 
 #include "Portfolio.hpp"
 
-std::vector<std::vector<float>> HeatMap(const std::shared_ptr<Portfolio>& portfolio);
+std::vector<std::vector<float>> CagrHeatMap(const std::shared_ptr<Portfolio>& portfolio);
 
 int WriteHeatMapToCSV(
     const std::shared_ptr<Portfolio>& portfolio,

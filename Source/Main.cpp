@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include "CagrHeatMap.hpp"
 #include "Drawdowns.hpp"
-#include "HeatMap.hpp"
 #include "Percentile.hpp"
 #include "PortfolioBuilder.hpp"
 #include "RollingReturns.hpp"
@@ -34,20 +34,20 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    // compute heat map
+    // compute CAGR heat map
 
-    auto heatMap = HeatMap(portfolio);
+    auto cagrHeatMap = CagrHeatMap(portfolio);
 
-    // write heat map to CSV file
+    // write CAGR heat map to CSV file
 
-    if (const auto result = WriteHeatMapToCSV(portfolio, heatMap, "heatmap.csv"); result != EXIT_SUCCESS)
+    if (const auto result = WriteHeatMapToCSV(portfolio, cagrHeatMap, "cagrheatmap.csv"); result != EXIT_SUCCESS)
     {
         return result;
     }
 
     // compute rolling returns
 
-    auto rollingReturns = RollingReturns(heatMap);
+    auto rollingReturns = RollingReturns(cagrHeatMap);
 
     // write rolling returns to CSV file
 
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 
     // compute & print drawdown stats
 
-    auto [drawdowns, deepestDrawdown, longestDrawdown, ulcerIndex] = Drawdowns(heatMap[0]);
+    auto [drawdowns, deepestDrawdown, longestDrawdown, ulcerIndex] = Drawdowns(cagrHeatMap[0]);
 
     std::cout << "Deepest Drawdown: " << deepestDrawdown << " %\n";
     std::cout << "Longest Drawdown: " << longestDrawdown << " months\n";
