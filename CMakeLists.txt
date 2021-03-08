@@ -22,7 +22,9 @@ set(SOURCES
   "Source/PortfolioBuilder.hpp"
   "Source/RollingReturns.cpp"
   "Source/RollingReturns.hpp"
-  "Source/Types.hpp")
+  "Source/Types.hpp"
+  "Source/Xirr.cpp"
+  "Source/Xirr.hpp")
 
 set(PRIVATE_INCLUDE_DIRECTORIES
   "External/rapidjson/include"

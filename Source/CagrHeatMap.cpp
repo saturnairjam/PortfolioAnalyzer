@@ -1,4 +1,4 @@
-#include <cmath> // for std::fabs()
+#include <cmath> // for std::fabs(), std::pow()
 #include <fstream>
 #include <iostream>
 #include <tuple>
